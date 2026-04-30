@@ -1,0 +1,7 @@
+﻿services:
+  auction:
+    image: auction
+    build:
+      context: .
+      dockerfile: Auction/Dockerfile
+
