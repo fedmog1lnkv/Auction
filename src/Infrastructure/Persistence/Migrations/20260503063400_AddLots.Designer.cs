@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260503063400_AddLots")]
+    partial class AddLots
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,59 +102,6 @@ namespace Infrastructure.Persistence.Migrations
                         .HasDatabaseName("ix_lots_status");
 
                     b.ToTable("lots", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Lots.LotPhoto", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
-
-                    b.Property<string>("LargeKey")
-                        .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("character varying(512)")
-                        .HasColumnName("large_key");
-
-                    b.Property<Guid>("LotId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("lot_id");
-
-                    b.Property<string>("MediumKey")
-                        .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("character varying(512)")
-                        .HasColumnName("medium_key");
-
-                    b.Property<int>("SortOrder")
-                        .HasColumnType("integer")
-                        .HasColumnName("sort_order");
-
-                    b.Property<string>("ThumbKey")
-                        .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("character varying(512)")
-                        .HasColumnName("thumb_key");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at");
-
-                    b.HasKey("Id")
-                        .HasName("pk_lot_photos");
-
-                    b.HasIndex("LotId")
-                        .HasDatabaseName("ix_lot_photos_lot_id");
-
-                    b.HasIndex("LotId", "SortOrder")
-                        .IsUnique()
-                        .HasDatabaseName("ix_lot_photos_lot_id_sort_order");
-
-                    b.ToTable("lot_photos", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Users.RefreshToken", b =>
@@ -288,16 +238,6 @@ namespace Infrastructure.Persistence.Migrations
                         .HasConstraintName("fk_refresh_tokens_users_user_id");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Domain.Lots.LotPhoto", b =>
-                {
-                    b.HasOne("Domain.Lots.Lot", null)
-                        .WithMany()
-                        .HasForeignKey("LotId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_lot_photos_lots_lot_id");
                 });
 #pragma warning restore 612, 618
         }

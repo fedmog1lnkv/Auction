@@ -1,0 +1,3 @@
+namespace Application.LotPhotos.RequestLotPhotoUploadUrl;
+
+public sealed record RequestLotPhotoUploadUrlRequest(string ContentType);

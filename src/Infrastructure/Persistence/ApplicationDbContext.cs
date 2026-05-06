@@ -1,14 +1,17 @@
+using System.Text.Json;
+using Domain.Lots;
 using Domain.Users;
 using Infrastructure.Outbox;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
-using System.Text.Json;
 
 namespace Infrastructure.Persistence;
 
 public sealed class ApplicationDbContext(
     DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
+    public DbSet<Lot> Lots => Set<Lot>();
+    public DbSet<LotPhoto> LotPhotos => Set<LotPhoto>();
     public DbSet<User> Users => Set<User>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
@@ -47,7 +50,8 @@ public sealed class ApplicationDbContext(
         {
             Id = Guid.NewGuid(),
             OccurredOnUtc = DateTime.UtcNow,
-            Type = domainEvent.GetType().AssemblyQualifiedName ?? domainEvent.GetType().FullName ?? domainEvent.GetType().Name,
+            Type = domainEvent.GetType().AssemblyQualifiedName ??
+                   domainEvent.GetType().FullName ?? domainEvent.GetType().Name,
             Content = JsonSerializer.Serialize(domainEvent, domainEvent.GetType())
         });
 

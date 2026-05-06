@@ -13,6 +13,7 @@ public abstract class BaseController : ControllerBase
         return result.Error.Type switch
         {
             ErrorType.Validation => BadRequest(payload),
+            ErrorType.Forbidden => StatusCode(StatusCodes.Status403Forbidden, payload),
             ErrorType.NotFound => NotFound(payload),
             ErrorType.Conflict => Conflict(payload),
             ErrorType.Problem => StatusCode(StatusCodes.Status500InternalServerError, payload),

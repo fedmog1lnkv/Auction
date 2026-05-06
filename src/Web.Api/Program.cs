@@ -1,6 +1,7 @@
 using Application;
 using Infrastructure;
 using Infrastructure.Persistence;
+using Infrastructure.Realtime;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 
@@ -64,5 +65,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<LotEventsHub>(LotEventsHub.HubRoute);
 
 app.Run();

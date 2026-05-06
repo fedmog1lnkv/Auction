@@ -1,6 +1,6 @@
 using System.Text.Json;
-using Infrastructure.DomainEvents;
 using Infrastructure.Persistence;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -55,7 +55,7 @@ internal sealed class OutboxProcessorService(
     {
         using var scope = scopeFactory.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        var dispatcher = scope.ServiceProvider.GetRequiredService<IDomainEventsDispatcher>();
+        var publisher = scope.ServiceProvider.GetRequiredService<IPublisher>();
 
         var batchSize = _options.BatchSize <= 0 ? 50 : _options.BatchSize;
         var messages = await dbContext.OutboxMessages
@@ -80,7 +80,7 @@ internal sealed class OutboxProcessorService(
                     throw new InvalidOperationException(
                         $"Failed to deserialize outbox payload for type: {message.Type}");
 
-                await dispatcher.DispatchAsync([domainEvent], cancellationToken);
+                await publisher.Publish(domainEvent, cancellationToken);
                 message.ProcessedOnUtc = DateTime.UtcNow;
                 message.Error = null;
             }
