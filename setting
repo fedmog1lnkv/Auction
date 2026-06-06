@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ru">
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Настройки</title>
+    <link rel="stylesheet" href=""> <!-- Связываем с классом CSS-->
+</head>
+<body data-page="settings">
+
+<header class="topbar">
+    <a class="brand" href="profile.html"><span class="logoMark">Аукцион</span></a>
+    <nav class="nav">
+        <a href="profile.html" data-page-link="profile">Профиль</a>
+        <a href="notifications.html" data-page-link="notifications">Уведомления</a>
+        <a href="settings.html" data-page-link="settings">Настройки</a>
+    </nav>
+    <div class="search"><span>⌕</span><input type="search" placeholder="Найти"></div>
+    <a href="profile.html" class="userRound" data-user-initials>Профиль</a>
+</header>
+
+<main class="main">
+    <h1>Настройки</h1>
+    <div class="profileGrid">
+        
+<aside class="sideMenu card">
+    <a href="profile.html" data-page-link="profile">Профиль</a>
+    <a href="profile.html#bids">Мои ставки</a>
+    <a href="notifications.html" data-page-link="notifications">Уведомления</a>
+    <a href="settings.html" data-page-link="settings">Настройки</a>
+</aside>
+
+        <form class="contentCol" id="settingsForm">
+            <div class="settingsGrid">
+                <section class="card settingSection">
+                    <h2>Данные профиля</h2>
+                    <div class="formRow">
+                        <div class="field"><label>Имя</label><input name="firstName" placeholder="Имя"></div>
+                        <div class="field"><label>Фамилия</label><input name="lastName" placeholder="Фамилия"></div>
+                    </div>
+                    <div class="field"><label>Email</label><input type="email" name="email" placeholder="Электронная почта"></div>
+                    <div class="field"><label>Телефон</label><input name="phone" placeholder="+7 (___) ___-__-__"></div> <!-- Изменить номер телефона, потом прикрутим сообщения для проверки-->
+                    <div class="field"><label>Моя информация</label><textarea name="about" placeholder="Пару слов о пользователе"></textarea></div>
+                </section>
+
+                <section class="setting">
+                    <h2>Изменить пароль</h2>
+                    <div class="field"><label>Старый пароль</label><input type="password" placeholder="Не подключено к API"></div>
+                    <div class="field"><label>Новый пароль</label><input type="password" placeholder="Новый пароль"></div>
+                    <div class="field"><label>Повторите пароль</label><input type="password" placeholder="Еще раз"></div>
+                </section>
+            </div>
+
+            <div class="settings">
+                <section class="card settingSection">
+                    <div class="field">
+                        <label>Тема</label>
+                        <select name="theme" id="theme">
+                            <option value="light">Светлая</option>
+                            <option value="dark">Темная</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>Количество строк в таблицах</label>
+                        <select name="rows">
+                            <option>10</option><option>20</option><option>50</option>
+                        </select>
+                    </div>
+                </section>
+
+                <section class="card setting">
+                    <h2>Уведомления</h2>
+                    <div class="checkLine"><span>Email-уведомления</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+                    <div class="checkLine"><span>Новости и подборки</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+                    <div class="checkLine"><span>Показывать онлайн-статус</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+                </section>
+            </div>
+
+            <div class="card settingSection">
+                <h3>Действия</h3>
+                <div class="saveLine">
+                    <button class="btn" type="submit">Применить настройки</button>
+                    <button class="btn danger" type="button" id="clearLocal">Очистить данные</button>
+                    <button class="bth danger2" type="button" id="clearLocal">Удалить аккаунт</button>
+                    <a href="profile.html" class="btn outline">Назад в профиль</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+<script src=""></script> <!--JS--
+</body>
+</html>
