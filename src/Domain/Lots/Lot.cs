@@ -1,3 +1,4 @@
+using Domain.Bids;
 using SharedKernel;
 
 namespace Domain.Lots;
@@ -139,6 +140,48 @@ public sealed class Lot : Entity
         Status = LotStatus.Cancelled;
         Touch(utcNow);
         return Result.Success();
+    }
+
+    public Result<Bid> PlaceBid(Guid bidId, Guid bidderId, decimal amount, DateTime utcNow)
+    {
+        if (Status != LotStatus.Active)
+            return Result.Failure<Bid>(BidErrors.LotNotActive);
+
+        if (EndsAt <= utcNow)
+            return Result.Failure<Bid>(BidErrors.LotEnded);
+
+        if (SellerId == bidderId)
+            return Result.Failure<Bid>(BidErrors.SellerCannotBid);
+
+        if (amount <= 0)
+            return Result.Failure<Bid>(BidErrors.InvalidAmount);
+
+        var minimumAmount = CurrentPrice + MinBidStep;
+        if (amount < minimumAmount)
+            return Result.Failure<Bid>(BidErrors.AmountTooLow(minimumAmount));
+
+        var bidResult = Bid.Create(bidId, Id, bidderId, amount, utcNow);
+        if (bidResult.IsFailure)
+            return Result.Failure<Bid>(bidResult.Error);
+
+        var bid = bidResult.Value;
+
+        CurrentPrice = amount;
+        CurrentWinnerId = bidderId;
+        Touch(utcNow);
+
+        Raise(new BidPlacedDomainEvent(
+            bid.Id,
+            Id,
+            bidderId,
+            amount,
+            CurrentPrice,
+            bidderId,
+            Version,
+            bid.CreatedAt,
+            UpdatedAt));
+
+        return Result.Success(bid);
     }
 
     public Result EnsureCanBeDeleted() =>

@@ -1,11 +1,13 @@
 using System.Text;
 using Application.Abstractions.Authentication;
+using Application.Abstractions.Bids;
 using Application.Abstractions.Data;
 using Application.Abstractions.LotPhotos;
 using Application.Abstractions.Lots;
 using Application.Abstractions.Storage;
 using Application.Abstractions.Users;
 using Infrastructure.Authentication;
+using Infrastructure.Bids;
 using Infrastructure.IntegrationEvents;
 using Infrastructure.LotPhotos;
 using Infrastructure.Lots;
@@ -90,6 +92,7 @@ public static class DependencyInjection
             new LotPhotoPolicy(maxLotPhotos, maxPhotoSizeBytes, presignedUrlTtlSeconds));
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IBidRepository, BidRepository>();
         services.AddScoped<ILotRepository, LotRepository>();
         services.AddScoped<ILotPhotoRepository, LotPhotoRepository>();
         services.AddScoped<IUserContext, UserContext>();

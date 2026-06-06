@@ -9,5 +9,4 @@
     <Project Path="src/SharedKernel/SharedKernel.csproj" />
     <Project Path="src/Web.Api/Web.Api.csproj" />
   </Folder>
-  <Folder Name="/tests/" />
 </Solution>

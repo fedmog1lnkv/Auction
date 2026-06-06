@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Domain.Bids;
 using Domain.Lots;
 using Domain.Users;
 using Infrastructure.Outbox;
@@ -11,6 +12,7 @@ public sealed class ApplicationDbContext(
     DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
     public DbSet<Lot> Lots => Set<Lot>();
+    public DbSet<Bid> Bids => Set<Bid>();
     public DbSet<LotPhoto> LotPhotos => Set<LotPhoto>();
     public DbSet<User> Users => Set<User>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
