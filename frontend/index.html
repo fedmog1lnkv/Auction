@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Аукцион</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <a class="logo" href="index.html">
+      <span class="logo-icon">⚖</span>
+      <span class="logo-text">Аукцион</span>
+    </a>
+
+    <nav class="nav">
+      <a class="nav-link active" href="index.html">Аукционы</a>
+      <a class="nav-link" href="bids.html">Мои ставки</a>
+      <a class="nav-link" href="how-it-works.html">Как это работает</a>
+    </nav>
+
+    <form class="search" id="searchForm">
+      <input type="search" id="searchInput" placeholder="Поиск лотов">
+    </form>
+
+    <a class="profile-link" href="#" aria-label="Профиль">
+      <span class="profile-icon"></span>
+    </a>
+  </header>
+
+  <main class="page">
+    <section class="page-title">
+      <h1>Аукционы</h1>
+      <p>Выберите лот и сделайте ставку</p>
+    </section>
+
+    <section class="layout">
+      <aside class="filters">
+        <h2>Фильтры</h2>
+
+        <label class="field">
+          <span>Статус</span>
+          <select id="statusFilter">
+            <option value="">Все статусы</option>
+            <option value="DRAFT">Черновик</option>
+            <option value="ACTIVE">Активный</option>
+            <option value="FINISHED">Завершён</option>
+            <option value="CANCELLED">Отменён</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Цена от</span>
+          <input type="number" id="priceFrom" placeholder="0">
+        </label>
+
+        <label class="field">
+          <span>Цена до</span>
+          <input type="number" id="priceTo" placeholder="100000">
+        </label>
+
+        <button class="secondary-button" type="button" id="resetFilters">
+          Сбросить
+        </button>
+      </aside>
+
+      <section class="lots-section">
+        <div class="section-head">
+          <h2>Список лотов</h2>
+
+          <button class="primary-button" type="button" id="createLotButton">
+            Создать лот
+          </button>
+        </div>
+
+        <div class="lots-list" id="lotsList">
+          <p class="empty-message">Лоты пока не загружены</p>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

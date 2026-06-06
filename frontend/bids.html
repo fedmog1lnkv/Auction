@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мои ставки</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <a class="logo" href="index.html">
+      <span class="logo-icon">⚖</span>
+      <span class="logo-text">Аукцион</span>
+    </a>
+
+    <nav class="nav">
+      <a class="nav-link" href="index.html">Аукционы</a>
+      <a class="nav-link" href="bids.html">Мои ставки</a>
+      <a class="nav-link" href="how-it-works.html">Как это работает</a>
+    </nav>
+
+    <form class="search" id="searchForm">
+      <input type="search" id="searchInput" placeholder="Поиск">
+    </form>
+
+    <a class="profile-link" href="#" aria-label="Профиль">
+      <span class="profile-icon"></span>
+    </a>
+  </header>
+
+  <main class="page">
+    <section class="page-title">
+      <h1>Мои ставки</h1>
+      <p>Следите за своими ставками и результатами аукционов</p>
+    </section>
+
+    <section class="tabs">
+      <button class="tab active" type="button" data-tab="active">
+        Активные
+      </button>
+      <button class="tab" type="button" data-tab="won">
+        Выигранные
+      </button>
+      <button class="tab" type="button" data-tab="watching">
+        Отслеживаемые
+      </button>
+    </section>
+
+    <section class="table-card">
+      <table class="bids-table">
+        <thead>
+          <tr>
+            <th>Лот</th>
+            <th>Статус</th>
+            <th>Моя ставка</th>
+            <th>Лучшая ставка</th>
+            <th>До конца</th>
+            <th>Действие</th>
+          </tr>
+        </thead>
+
+        <tbody id="bidsTableBody">
+          <tr class="empty-row">
+            <td colspan="6">Ставки пока не загружены</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
