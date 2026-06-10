@@ -21,16 +21,16 @@
                     <button class="tabBtn" type="button" data-tab="regForm">Регистрация</button>
                 </div>
 
-                <form class="dataentryform">
+                <form class="dataentryform" id="loginForm">
                     <!--Вводим электронную почту-->
                     <div class="tabs1">
                         <label>Электронная почта</label>
-                        <input type="email" name="email" placeholder="Электронная почта" required>
+                        <input id="loginEmail" type="email" name="email" placeholder="Электронная почта" required>
                     </div>
                     <!--Вводим пароль-->
                     <div class="tab2">
                         <label>Пароль</label>
-                        <input type="password" name="password" placeholder="Введите пароль" required>
+                        <input id="loginPassword" type="password" name="password" placeholder="Введите пароль" required>
                     </div>
 
                     <button class="btn" type="submit">Войти</button>
@@ -40,26 +40,24 @@
                     <!--Вводим имя-->
                     <div class="row">
                             <label>Имя</label>
-                            <input type="text" placeholder="Имя" required>
+                            <input id="regFirstName" type="text" name="firstName" placeholder="Имя" required>
                         </div>
                           <!--Вводим фамилию-->
                         <div class="inputBlock">
                             <label>Фамилия</label>
-                            <input type="text" placeholder="Фамилия" required>
+                            <input id="regLastName" type="text" name="lastName" placeholder="Фамилия" required>
                         </div>
-                    </div>
                     <!--Ввод электронной почты-->
                     <div class="input1">
-                        <input type="email" name="email" placeholder="Электронная почта" required>
+                        <input id="regEmail" type="email" name="email" placeholder="Электронная почта" required>
                     </div>
                     <!--Ввод пароля-->
                     <div class="input2">
-                        <input type="password" name="password" placeholder="Минимум 8 символов" required>
+                        <input id="regPassword" type="password" name="password" placeholder="Минимум 8 символов" required>
                     </div>
                     <!--Кнопка создания ака-->
                     <button class="btn" type="submit">Создать аккаунт</button>
                 </form>
-            </div>
     </main>
 
     <script src="app.js"></script>  <!-- Связываем с JS-->
