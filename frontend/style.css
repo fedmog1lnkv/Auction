@@ -336,3 +336,80 @@ body {
   text-align: center;
   padding: 40px 12px;
 }
+.Form {
+    width: 420px;
+    margin: 60px auto;
+    padding: 25px;
+    background: white;
+    border: 1px solid #d9dee8;
+    border-radius: 8px;
+}
+
+.login-home-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #1d73e8;
+    text-decoration: none;
+}
+
+.Form1 h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.Form1 p {
+    color: #6b7280;
+    margin-bottom: 20px;
+}
+
+.Form2 {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tabBtn {
+    padding: 8px 14px;
+    border: 1px solid #d1d5db;
+    background: #f3f4f6;
+    cursor: pointer;
+}
+
+.tabBtn.active {
+    background: #1d73e8;
+    color: white;
+}
+
+.dataentryform,
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.dataentryform div,
+.form div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+input {
+    height: 38px;
+    padding: 0 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+}
+
+.btn {
+    height: 38px;
+    border: none;
+    background: #1d73e8;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#regForm {
+    display: none;
+}
