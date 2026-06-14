@@ -4,69 +4,50 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Уведомления</title>
-    <link rel="stylesheet" href="style.css"><!-- Связываем с классом в CSS href=""-->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body data-page="notifications">
 
-  <header class="header">
+<header class="header">
     <a class="logo brand" href="index.html">
-      <span class="logo-icon logoMark">⚖</span>
-      <span class="logo-text">Аукцион</span>
+        <span class="logo-icon logoMark">⚖</span>
+        <span class="logo-text">Аукцион</span>
     </a>
 
     <nav class="nav">
-      <a class="nav-link" href="index.html">Аукционы</a>
-      <a class="nav-link" href="bids.html">Мои ставки</a>
-      <a class="nav-link" href="how-it-works.html">Как это работает</a>
-      <a class="nav-link" href="lot.html">Карточка лота</a>
-      <a class="nav-link" href="profile.html">Профиль</a>
-      <a class="nav-link active" href="notifications.html">Уведомления</a>
-      <a class="nav-link" href="settings.html">Настройки</a>
+        <a class="nav-link" href="index.html">Аукционы</a>
+        <a class="nav-link" href="bids.html">Мои ставки</a>
+        <a class="nav-link" href="how-it-works.html">Как это работает</a>
+        <a class="nav-link" href="lot.html">Карточка лота</a>
+        <a class="nav-link" href="profile.html">Профиль</a>
+        <a class="nav-link active" href="notifications.html">Уведомления</a>
+        <a class="nav-link" href="settings.html">Настройки</a>
     </nav>
 
     <form class="search" id="searchForm">
-      <input type="search" id="searchInput" placeholder="Поиск">
+        <input type="search" id="searchInput" placeholder="Поиск">
     </form>
 
     <a class="profile-link userRound" href="profile.html" aria-label="Профиль">
-      <span class="profile-icon"></span>
+        <span class="profile-icon"></span>
     </a>
-  </header>
+</header>
 
 <main class="main page">
-    <h1>Уведомления</h1>
+    <section class="page-title">
+        <h1>Уведомления</h1>
+        <p>Список последних уведомлений</p>
+    </section>
+
     <div class="profileGrid profileGridSingle">
         <section class="contentCol">
-            <div class="panelPad">
-                <div class="notifHead">
-                    <div>
-                        <h2>История аккаунта</h2>
-                        <span class="muted">Ставки, отслеживаемые лоты, пополнение и окончание аукционов</span>
-                    </div>
-                    <button class="btn outline" id="allRead">Все прочитано</button>
-                    <button class="btn light" id="clearRead">Очистить сообщения</button>
-                </div>
-
-                <div class="filterLine">
-                    <button class="pill active" data-filter="all">Все</button>
-                    <button class="pill" data-filter="unread">Новые</button>
-                    <button class="pill" data-filter="bid">Ставки</button>
-                    <button class="pill" data-filter="watch">Отслеживание</button>
-                    <button class="pill" data-filter="end">Завершение</button>
-                </div>
-
-                <div id="notiList"></div>
-            </div>
-
-            <div class="card panelPad">
-                <h3>Настройки уведомления</h3> <!--Настройки увемления, будет настроено после или вообще не использоваться-->
-                <div class="checkLine"><span>Уведомлять, если мою ставку перебили</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div> <!---->
-                <div class="checkLine"><span>Напоминать о завершении лота</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-                <div class="checkLine"><span>Показывать уведомления о новых лотах</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+            <div class="card panelPad emptyState">
+                <h2>Новых уведомлений нет</h2>
             </div>
         </section>
     </div>
 </main>
-  <script src="app.js"></script>
+
+<script src="app.js"></script>
 </body>
 </html>
