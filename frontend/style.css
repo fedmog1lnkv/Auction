@@ -4,17 +4,34 @@
 
 body {
   margin: 0;
+  min-width: 320px;
   font-family: Arial, sans-serif;
   color: #111827;
   background: #f7f8fb;
 }
 
+h1,
+h2,
+h3,
+p,
+a,
+span,
+td,
+th,
+label,
+button,
+input,
+textarea,
+select {
+  overflow-wrap: anywhere;
+}
+
 .header {
-  height: 78px;
+  min-height: 78px;
   display: flex;
   align-items: center;
-  gap: 36px;
-  padding: 0 32px;
+  gap: 22px;
+  padding: 14px 32px;
   background: #ffffff;
   border-bottom: 1px solid #d9dee8;
 }
@@ -27,6 +44,7 @@ body {
   color: #1d73e8;
   font-weight: 700;
   font-size: 28px;
+  white-space: nowrap;
 }
 
 .logo-icon {
@@ -37,18 +55,19 @@ body {
 .nav {
   display: flex;
   align-items: center;
-  gap: 28px;
-  height: 100%;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
 .nav-link {
-  height: 100%;
+  min-height: 38px;
   display: flex;
   align-items: center;
   color: #4b5563;
   text-decoration: none;
   font-size: 16px;
   border-bottom: 3px solid transparent;
+  white-space: nowrap;
 }
 
 .nav-link.active {
@@ -58,10 +77,12 @@ body {
 
 .search {
   margin-left: auto;
+  min-width: 190px;
 }
 
 .search input {
-  width: 340px;
+  width: 100%;
+  max-width: 340px;
   height: 42px;
   padding: 0 16px;
   border: 1px solid #d1d5db;
@@ -76,6 +97,7 @@ body {
 
 .profile-link {
   width: 44px;
+  min-width: 44px;
   height: 44px;
   border-radius: 50%;
   background: #1d73e8;
@@ -105,6 +127,9 @@ body {
 }
 
 .page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 34px 32px 48px;
 }
 
@@ -112,7 +137,8 @@ body {
   margin-bottom: 28px;
 }
 
-.page-title h1 {
+.page-title h1,
+.main > h1 {
   margin: 0 0 10px;
   font-size: 38px;
   font-weight: 700;
@@ -132,7 +158,8 @@ body {
 }
 
 .filters,
-.lots-section {
+.lots-section,
+.card {
   background: #ffffff;
   border: 1px solid #d9dee8;
   border-radius: 8px;
@@ -147,7 +174,8 @@ body {
   font-size: 18px;
 }
 
-.field {
+.field,
+.fieldSimple {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -157,8 +185,13 @@ body {
 }
 
 .field input,
-.field select {
-  height: 42px;
+.field select,
+.field textarea,
+.fieldSimple input,
+.fieldSimple select,
+.fieldSimple textarea {
+  width: 100%;
+  min-height: 42px;
   padding: 0 12px;
   border: 1px solid #d1d5db;
   border-radius: 6px;
@@ -167,18 +200,40 @@ body {
   background: #ffffff;
 }
 
+.field textarea,
+.fieldSimple textarea {
+  min-height: 90px;
+  padding-top: 10px;
+  resize: vertical;
+}
+
 .field input:focus,
-.field select:focus {
+.field select:focus,
+.field textarea:focus,
+.fieldSimple input:focus,
+.fieldSimple select:focus,
+.fieldSimple textarea:focus {
   border-color: #1d73e8;
 }
 
+.field input[readonly] {
+  background: #f9fafb;
+  color: #6b7280;
+}
+
 .secondary-button,
-.primary-button {
-  height: 42px;
+.primary-button,
+.btn {
+  min-height: 42px;
   border: none;
   border-radius: 6px;
   font-size: 15px;
   cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 18px;
 }
 
 .secondary-button {
@@ -187,14 +242,25 @@ body {
   background: #eef5ff;
 }
 
-.primary-button {
-  padding: 0 22px;
+.primary-button,
+.btn {
   color: #ffffff;
   background: #1d73e8;
 }
 
+.btn.outline {
+  color: #1d73e8;
+  background: #eef5ff;
+}
+
+.btn.danger {
+  color: #ffffff;
+  background: #dc2626;
+}
+
 .primary-button:hover,
-.secondary-button:hover {
+.secondary-button:hover,
+.btn:hover {
   opacity: 0.9;
 }
 
@@ -231,53 +297,6 @@ body {
   font-size: 16px;
 }
 
-@media (max-width: 900px) {
-  .header {
-    height: auto;
-    flex-wrap: wrap;
-    padding: 20px;
-    gap: 18px;
-  }
-
-  .nav {
-    order: 3;
-    width: 100%;
-    height: 44px;
-  }
-
-  .search {
-    margin-left: 0;
-    flex: 1;
-  }
-
-  .search input {
-    width: 100%;
-  }
-
-  .layout {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 560px) {
-  .page {
-    padding: 24px 16px;
-  }
-
-  .page-title h1 {
-    font-size: 30px;
-  }
-
-  .section-head {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .primary-button {
-    width: 100%;
-  }
-}
-
 .tabs {
   display: flex;
   gap: 28px;
@@ -301,10 +320,11 @@ body {
 }
 
 .table-card {
+  width: 100%;
   background: #ffffff;
   border: 1px solid #d9dee8;
   border-radius: 8px;
-  padding: 24px;
+  padding: 20px;
   overflow-x: auto;
 }
 
@@ -312,6 +332,7 @@ body {
   width: 100%;
   border-collapse: collapse;
   font-size: 16px;
+  min-width: 620px;
 }
 
 .bids-table th {
@@ -336,80 +357,190 @@ body {
   text-align: center;
   padding: 40px 12px;
 }
+
 .Form {
-    width: 420px;
-    margin: 60px auto;
-    padding: 25px;
-    background: white;
-    border: 1px solid #d9dee8;
-    border-radius: 8px;
+  width: 420px;
+  max-width: calc(100% - 32px);
+  margin: 60px auto;
+  padding: 25px;
+  background: white;
+  border: 1px solid #d9dee8;
+  border-radius: 8px;
 }
 
 .login-home-link {
-    display: inline-block;
-    margin-bottom: 20px;
-    color: #1d73e8;
-    text-decoration: none;
+  display: inline-block;
+  margin-bottom: 20px;
+  color: #1d73e8;
+  text-decoration: none;
 }
 
 .Form1 h1 {
-    font-size: 28px;
-    margin-bottom: 10px;
+  font-size: 28px;
+  margin: 0 0 10px;
 }
 
 .Form1 p {
-    color: #6b7280;
-    margin-bottom: 20px;
+  color: #6b7280;
+  margin: 0 0 20px;
 }
 
 .Form2 {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .tabBtn {
-    padding: 8px 14px;
-    border: 1px solid #d1d5db;
-    background: #f3f4f6;
-    cursor: pointer;
+  padding: 8px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #f3f4f6;
+  cursor: pointer;
 }
 
 .tabBtn.active {
-    background: #1d73e8;
-    color: white;
+  background: #1d73e8;
+  color: white;
 }
 
 .dataentryform,
 .form {
-    display: flex;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dataentryform .btn,
+.form .btn {
+  width: 100%;
+}
+
+.profileGridSingle {
+  max-width: 960px;
+}
+
+.contentCol {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.panelPad,
+.settingSection {
+  padding: 24px;
+}
+
+.personCard {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+}
+
+.bigAvatar {
+  width: 78px;
+  min-width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  background: #eef5ff;
+  color: #1d73e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.personInfo {
+  min-width: 0;
+}
+
+.personInfo h2,
+.panelPad h2,
+.settingSection h2,
+.emptyState h2 {
+  margin: 0 0 10px;
+}
+
+.muted {
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.actionsLine,
+.saveLine {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.infoBlock p:last-child,
+.emptyState p:last-child,
+.settingSection p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 1000px) {
+  .header {
+    flex-wrap: wrap;
+  }
+
+  .nav {
+    order: 3;
+    width: 100%;
+  }
+
+  .search {
+    margin-left: 0;
+    flex: 1;
+  }
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .header {
+    padding: 18px;
+  }
+
+  .page {
+    padding: 24px 16px;
+  }
+
+  .page-title h1,
+  .main > h1 {
+    font-size: 30px;
+  }
+
+  .section-head,
+  .personCard {
+    align-items: stretch;
     flex-direction: column;
-    gap: 12px;
-}
+  }
 
-.dataentryform div,
-.form div {
-    display: flex;
+  .primary-button,
+  .secondary-button,
+  .btn {
+    width: 100%;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+
+  .Form2 {
     flex-direction: column;
-    gap: 5px;
-}
-
-input {
-    height: 38px;
-    padding: 0 10px;
-    border: 1px solid #d1d5db;
-    border-radius: 5px;
-}
-
-.btn {
-    height: 38px;
-    border: none;
-    background: #1d73e8;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-#regForm {
-    display: none;
+  }
 }
