@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   initSearchForm();
   initFilters();
   initBidsTabs();
-
+  createLotForm();
   loginTabs();
   loginForm();
   registerForm();
@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
   settingsPage();
   logoutButtons();
   profileLink();
+  loadLots();
 });
 
 function initSearchForm() {
@@ -385,4 +386,159 @@ function escapeHtml(text) {
     .replace(/>/g, "&gt;")
     .replace(/\"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+function createLotForm() {
+  var form = document.getElementById("createLotForm");
+
+  if (form == null) {
+    return;
+  }
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    var message = document.getElementById("createLotMessage");
+    var token = localStorage.getItem("token");
+
+    if (token == null || token == "") {
+      message.textContent = "Сначала войдите в аккаунт.";
+      return;
+    }
+
+    var startsAtValue = document.getElementById("startsAtInput").value;
+    var endsAtValue = document.getElementById("endsAtInput").value;
+
+    var lotData = {
+      title: document.getElementById("lotTitleInput").value.trim(),
+      description: document.getElementById("lotDescriptionInput").value.trim(),
+      startingPrice: Number(document.getElementById("startingPriceInput").value),
+      minBidStep: Number(document.getElementById("minBidStepInput").value),
+      startsAt: new Date(startsAtValue).toISOString(),
+      endsAt: new Date(endsAtValue).toISOString()
+    };
+
+    message.textContent = "Создаём лот...";
+
+    fetch(API_URL + "/lots", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      },
+      body: JSON.stringify(lotData)
+    })
+      .then(function (response) {
+        return response.json().then(function (data) {
+          return {
+            ok: response.ok,
+            data: data
+          };
+        });
+      })
+      .then(function (result) {
+        if (result.ok == false) {
+          throw new Error(result.data.message || "Не удалось создать лот");
+        }
+
+        message.textContent = "Лот создан.";
+
+        var lotId = getValue(result.data, "id", "Id");
+
+        if (lotId != "") {
+          window.location.href = "lot.html?id=" + encodeURIComponent(lotId);
+        } else {
+          window.location.href = "index.html";
+        }
+      })
+      .catch(function (error) {
+        message.textContent = error.message;
+      });
+  });
+}
+function loadLots() {
+  var lotsList = document.getElementById("lotsList");
+
+  if (lotsList == null) {
+    return;
+  }
+
+  lotsList.innerHTML = "<p class='empty-message'>Загрузка лотов...</p>";
+
+  fetch(API_URL + "/lots?page=1&limit=20")
+    .then(function (response) {
+      if (response.ok == false) {
+        throw new Error("Не удалось загрузить лоты");
+      }
+
+      return response.json();
+    })
+    .then(function (data) {
+      var lots = getItems(data);
+      renderLots(lots);
+    })
+    .catch(function () {
+      lotsList.innerHTML = "<p class='empty-message'>Не удалось загрузить лоты</p>";
+    });
+}
+
+function renderLots(lots) {
+  var lotsList = document.getElementById("lotsList");
+
+  if (lotsList == null) {
+    return;
+  }
+
+  if (lots.length == 0) {
+    lotsList.innerHTML = "<p class='empty-message'>Лотов пока нет</p>";
+    return;
+  }
+
+  var html = "";
+
+  for (var i = 0; i < lots.length; i++) {
+    var id = getValue(lots[i], "id", "Id");
+    var title = getValue(lots[i], "title", "Title");
+    var description = getValue(lots[i], "description", "Description");
+    var currentPrice = getValue(lots[i], "currentPrice", "CurrentPrice");
+    var status = getValue(lots[i], "status", "Status");
+    var endsAt = getValue(lots[i], "endsAt", "EndsAt");
+
+    html += "<article class='lot-card'>";
+    html += "<div class='lot-card-content'>";
+    html += "<h3>" + escapeHtml(title) + "</h3>";
+
+    html += "<p class='lot-card-description'>";
+    html += escapeHtml(description || "Описание не добавлено");
+    html += "</p>";
+
+    html += "<div class='lot-card-row'>";
+    html += "<span>Текущая цена</span>";
+    html += "<strong>" + priceToText(currentPrice) + "</strong>";
+    html += "</div>";
+
+    html += "<div class='lot-card-row'>";
+    html += "<span>Статус</span>";
+    html += "<strong>" + statusToText(status) + "</strong>";
+    html += "</div>";
+
+    html += "<div class='lot-card-row'>";
+    html += "<span>Окончание</span>";
+    html += "<strong>" + dateToText(endsAt) + "</strong>";
+    html += "</div>";
+
+    html += "<a class='primary-button lot-card-link' href='lot.html?id=" + encodeURIComponent(id) + "'>";
+    html += "Открыть лот";
+    html += "</a>";
+
+    html += "</div>";
+    html += "</article>";
+  }
+
+  lotsList.innerHTML = html;
+}
+
+function priceToText(value) {
+  var number = Number(value || 0);
+
+  return number.toLocaleString("ru-RU") + " ₽";
 }
