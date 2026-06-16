@@ -14,20 +14,20 @@ jobs:
     name: Tests
     runs-on: ubuntu-latest
 
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
-
-    - name: Restore
-      run: dotnet restore Auction.slnx
-
-    - name: Run tests
-      run: dotnet test Auction.slnx --configuration Release --no-restore
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+  
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+  
+      - name: Restore
+        run: dotnet restore Auction.slnx
+  
+      - name: Run tests
+        run: dotnet test Auction.slnx --configuration Release --no-restore
 
   build-web-api:
     name: Build Web API
