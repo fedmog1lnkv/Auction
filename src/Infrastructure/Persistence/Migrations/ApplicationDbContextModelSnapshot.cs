@@ -22,6 +22,40 @@ namespace Infrastructure.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Domain.Bids.Bid", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric(18,2)")
+                        .HasColumnName("amount");
+
+                    b.Property<Guid>("BidderId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("bidder_id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<Guid>("LotId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("lot_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_bids");
+
+                    b.HasIndex("BidderId")
+                        .HasDatabaseName("ix_bids_bidder_id");
+
+                    b.HasIndex("LotId", "CreatedAt")
+                        .HasDatabaseName("ix_bids_lot_id_created_at");
+
+                    b.ToTable("bids", (string)null);
+                });
+
             modelBuilder.Entity("Domain.Lots.Lot", b =>
                 {
                     b.Property<Guid>("Id")
@@ -276,6 +310,23 @@ namespace Infrastructure.Persistence.Migrations
                         .HasDatabaseName("ix_outbox_messages_processed_on_utc");
 
                     b.ToTable("outbox_messages", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Bids.Bid", b =>
+                {
+                    b.HasOne("Domain.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("BidderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_bids_users_bidder_id");
+
+                    b.HasOne("Domain.Lots.Lot", null)
+                        .WithMany()
+                        .HasForeignKey("LotId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_bids_lots_lot_id");
                 });
 
             modelBuilder.Entity("Domain.Users.RefreshToken", b =>

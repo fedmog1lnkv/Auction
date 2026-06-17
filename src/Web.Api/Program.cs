@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
+const string AllowAllCorsPolicy = "AllowAllCors";
 var shutdownTimeoutSeconds = builder.Configuration.GetValue("Hosting:ShutdownTimeoutSeconds", 30);
 builder.Services.Configure<HostOptions>(options =>
 {
@@ -16,6 +17,16 @@ builder.Services.Configure<HostOptions>(options =>
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddControllers();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(AllowAllCorsPolicy, policy =>
+    {
+        policy
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen(options =>
@@ -60,6 +71,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(AllowAllCorsPolicy);
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -1,3 +1,4 @@
+using Application.Bids.PlaceBid;
 using Application.LotPhotos.CompleteLotPhotoUpload;
 using Application.LotPhotos.DeleteLotPhoto;
 using Application.LotPhotos.GetLotPhotos;
@@ -76,6 +77,18 @@ public sealed class LotsController(ISender sender) : BaseController
             request.StartsAt,
             request.EndsAt);
 
+        var result = await sender.Send(command, cancellationToken);
+        return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
+    }
+
+    [Authorize]
+    [HttpPost("{id:guid}/bids")]
+    public async Task<IActionResult> PlaceBid(
+        [FromRoute] Guid id,
+        [FromBody] PlaceBidRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = new PlaceBidCommand(id, request.Amount);
         var result = await sender.Send(command, cancellationToken);
         return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
     }

@@ -28,12 +28,23 @@ internal sealed class RefreshTokenCleanupService(
             {
                 await CleanupAsync(stoppingToken);
             }
+            catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
+            {
+                break;
+            }
             catch (Exception ex)
             {
                 logger.LogError(ex, "Refresh token cleanup failed");
             }
 
-            await Task.Delay(TimeSpan.FromHours(_options.IntervalHours), stoppingToken);
+            try
+            {
+                await Task.Delay(TimeSpan.FromHours(_options.IntervalHours), stoppingToken);
+            }
+            catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
+            {
+                break;
+            }
         }
     }
 
