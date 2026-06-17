@@ -2,8 +2,8 @@
 
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { apiUrl } from '../api'
 
-const API_URL = 'http://186.246.31.83:8080'
 const router = useRouter()
 
 const isLoading = ref(false)
@@ -52,7 +52,7 @@ async function createLot() {
   }
   
   try {
-  const response = await fetch(`${API_URL}/lots`, {
+  const response = await fetch(apiUrl('/lots'), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

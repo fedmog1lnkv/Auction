@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { apiUrl } from '../api'
 
-const API_URL = 'http://186.246.31.83:8080'
 const router = useRouter()
 
 const activeTab = ref('login')
@@ -31,7 +31,7 @@ async function login() {
   isLoading.value = true
 
   try {
-    const response = await fetch(`${API_URL}/api/auth/login`, {
+    const response = await fetch(apiUrl('/api/auth/login'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -59,7 +59,7 @@ async function register() {
   isLoading.value = true
 
   try {
-    const response = await fetch(`${API_URL}/api/auth/register`, {
+    const response = await fetch(apiUrl('/api/auth/register'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

@@ -2,8 +2,7 @@
 
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-
-const API_URL = 'http://186.246.31.83:8080'
+import { apiUrl } from '../api'
 
 const route = useRoute()
 const router = useRouter()
@@ -62,7 +61,7 @@ async function loadLots() {
   }
 
   try {
-    const response = await fetch(`${API_URL}/lots?${params.toString()}`)
+    const response = await fetch(apiUrl(`/lots?${params.toString()}`))
 
     if (!response.ok) {
       throw new Error('Не удалось загрузить лоты')
