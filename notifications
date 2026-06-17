@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ru">
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Уведомления</title>
+    <link rel="stylesheet" href=""><!-- Связываем с классом в CSS href=""-->
+</head>
+<body data-page="notifications">
+
+<header class="topbar">
+    <a href="profile.html">Аукцион</a>
+    <a href="profile.html" data-page-link="profile">Профиль</a>
+    <a href="notifications.html" data-page-link="notifications">Уведомления</a>
+    <a href="settings.html" data-page-link="settings">Настройки</a>
+    <input type="search" placeholder="Найти"></div>
+    <a href="profile.html" class="userRound" data-user-initials>Профиль</a>
+</header>
+
+<main class="main">
+    <h1>Уведомления</h1>
+    <div class="profileGrid">
+        
+<aside class="sideMenu">
+    <a href="profile.html" data-page-link="profile">Профиль</a>
+    <a href="profile.html#bids">Мои ставки</a>
+    <a href="notifications.html" data-page-link="notifications">Уведомления</a>
+    <a href="settings.html" data-page-link="settings">Настройки</a>
+</aside>
+
+        <section class="contentCol">
+            <div class="panelPad">
+                <div class="notifHead">
+                    <div>
+                        <h2>История аккаунта</h2>
+                        <span class="muted">Ставки, отслеживаемые лоты, пополнение и окончание аукционов</span>
+                    </div>
+                    <button class="btn outline" id="allRead">Все прочитано</button>
+                    <button class="btn light" id="clearRead">Очистить сообщения</button>
+                </div>
+
+                <div class="filterLine">
+                    <button class="pill active" data-filter="all">Все</button>
+                    <button class="pill" data-filter="unread">Новые</button>
+                    <button class="pill" data-filter="bid">Ставки</button>
+                    <button class="pill" data-filter="watch">Отслеживание</button>
+                    <button class="pill" data-filter="end">Завершение</button>
+                </div>
+
+                <div id="notiList"></div>
+            </div>
+
+            <div class="card panelPad">
+                <h3>Настройки уведомления</h3> <!--Настройки увемления, будет настроено после или вообще не использоваться-->
+                <div class="checkLine"><span>Уведомлять, если мою ставку перебили</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div> <!---->
+                <div class="checkLine"><span>Напоминать о завершении лота</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+                <div class="checkLine"><span>Показывать уведомления о новых лотах</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+            </div>
+        </section>
+    </div>
+</main>
+<script src=""></script> <!--Связываем с JS src=""-->
+</body>
+</html>

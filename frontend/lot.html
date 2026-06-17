@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Карточка товара</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <a class="logo" href="index.html">
+      <span class="logo-icon">⚖</span>
+      <span class="logo-text">Аукцион</span>
+    </a>
+
+    <nav class="nav">
+      <a class="nav-link active" href="index.html">Аукционы</a>
+      <a class="nav-link" href="bids.html">Мои ставки</a>
+      <a class="nav-link" href="how-it-works.html">Как это работает</a>
+    </nav>
+
+    <form class="search" id="searchForm">
+      <input type="search" id="searchInput" placeholder="Поиск">
+    </form>
+
+    <a class="profile-link" href="#" aria-label="Профиль">
+      <span class="profile-icon"></span>
+    </a>
+  </header>
+
+  <main class="page">
+    <nav class="breadcrumbs">
+      <a href="index.html">Главная</a>
+      <span>/</span>
+      <a href="index.html">Аукционы</a>
+      <span>/</span>
+      <span id="lotBreadcrumb">Карточка товара</span>
+    </nav>
+
+    <section class="lot-details-layout">
+      <section class="product-gallery">
+        <div class="main-product-image">
+          <div class="image-placeholder" id="lotImage">Фото лота</div>
+        </div>
+
+        <div class="thumbnail-row">
+          <button class="thumbnail active" type="button">1</button>
+          <button class="thumbnail" type="button">2</button>
+          <button class="thumbnail" type="button">3</button>
+          <button class="thumbnail" type="button">4</button>
+        </div>
+      </section>
+
+      <section class="product-info">
+        <h1 id="lotTitle">Название лота</h1>
+
+        <p class="lot-label">Текущая ставка</p>
+        <p class="lot-price" id="lotCurrentPrice">0 ₽</p>
+
+        <p class="lot-label">Шаг ставки</p>
+        <p class="lot-price small" id="lotBidStep">0 ₽</p>
+
+        <p class="lot-label">До окончания</p>
+        <p class="lot-time" id="lotTimeLeft">--:--:--</p>
+
+        <button class="primary-button wide-button" type="button" id="makeBidButton">
+          Сделать ставку
+        </button>
+
+        <button class="secondary-button wide-button" type="button" id="favoriteButton">
+          В избранное
+        </button>
+      </section>
+
+      <aside class="bid-history">
+        <h2>История ставок</h2>
+
+        <div class="bid-list" id="bidHistoryList">
+          <p class="empty-message">История ставок пока недоступна</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="product-extra">
+      <div class="description-block">
+        <h2>Описание</h2>
+        <p id="lotDescription">
+          Описание лота появится здесь после загрузки данных.
+        </p>
+      </div>
+
+      <div class="characteristics-block">
+        <h2>Характеристики</h2>
+
+        <table class="characteristics-table">
+          <tbody>
+            <tr>
+              <td>Статус</td>
+              <td id="lotStatus">Не указан</td>
+            </tr>
+            <tr>
+              <td>Начальная цена</td>
+              <td id="lotStartingPrice">0 ₽</td>
+            </tr>
+            <tr>
+              <td>Продавец</td>
+              <td id="lotSeller">Не указан</td>
+            </tr>
+            <tr>
+              <td>Дата начала</td>
+              <td id="lotStartDate">Не указана</td>
+            </tr>
+            <tr>
+              <td>Дата окончания</td>
+              <td id="lotEndDate">Не указана</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

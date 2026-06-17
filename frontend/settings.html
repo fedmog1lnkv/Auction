@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Настройки</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="settings">
+
+<header class="header">
+    <a class="logo brand" href="index.html">
+        <span class="logo-icon logoMark">⚖</span>
+        <span class="logo-text">Аукцион</span>
+    </a>
+
+    <nav class="nav">
+        <a class="nav-link" href="index.html">Аукционы</a>
+        <a class="nav-link" href="bids.html">Мои ставки</a>
+        <a class="nav-link" href="how-it-works.html">Как это работает</a>
+        <a class="nav-link" href="notifications.html">Уведомления</a>
+        <a class="nav-link active" href="settings.html">Настройки</a>
+    </nav>
+
+    <form class="search" id="searchForm">
+        <input type="search" id="searchInput" placeholder="Поиск">
+    </form>
+
+    <a class="profile-link userRound" href="profile.html" aria-label="Профиль">
+        <span class="profile-icon"></span>
+    </a>
+</header>
+
+<main class="main page">
+    <section class="page-title">
+        <h1>Настройки</h1>
+        <p>Данные аккаунта</p>
+    </section>
+
+    <div class="profileGrid profileGridSingle">
+        <section class="contentCol">
+            <form class="card settingSection" id="settingsInfoForm">
+                <h2>Данные аккаунта</h2>
+
+                <div class="formRow">
+                    <div class="field">
+                        <label>Имя</label>
+                        <input name="firstName" readonly>
+                    </div>
+                    <div class="field">
+                        <label>Фамилия</label>
+                        <input name="lastName" readonly>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>Email</label>
+                    <input type="email" name="email" readonly>
+                </div>
+
+            </form>
+
+            <div class="card settingSection">
+                <h2>Действия</h2>
+                <div class="saveLine">
+                    <a href="profile.html" class="btn outline">Назад в профиль</a>
+                    <button class="btn danger" type="button" data-logout>Выйти из аккаунта</button>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

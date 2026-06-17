@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Создать лот</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="create-lot">
+  <header class="header">
+    <a class="logo" href="index.html">
+      <span class="logo-icon">⚖</span>
+      <span class="logo-text">Аукцион</span>
+    </a>
+
+    <nav class="nav">
+      <a class="nav-link active" href="index.html">Аукционы</a>
+      <a class="nav-link" href="bids.html">Мои ставки</a>
+      <a class="nav-link" href="how-it-works.html">Как это работает</a>
+    </nav>
+
+    <form class="search" id="searchForm">
+      <input type="search" id="searchInput" placeholder="Поиск">
+    </form>
+
+    <a class="profile-link" href="#" aria-label="Профиль">
+      <span class="profile-icon"></span>
+    </a>
+  </header>
+
+  <main class="page">
+    <section class="page-title">
+      <h1>Создать лот</h1>
+      <p>Заполните данные, чтобы добавить новый лот на аукцион</p>
+    </section>
+
+    <section class="table-card">
+      <form class="lot-form" id="createLotForm">
+        <label class="field">
+          <span>Название</span>
+          <input type="text" id="lotTitleInput" required>
+        </label>
+
+        <label class="field">
+          <span>Описание</span>
+          <textarea id="lotDescriptionInput" rows="5"></textarea>
+        </label>
+
+        <div class="formRow">
+          <label class="field">
+            <span>Начальная цена</span>
+            <input type="number" id="startingPriceInput" min="1" step="1" required>
+          </label>
+
+          <label class="field">
+            <span>Шаг ставки</span>
+            <input type="number" id="minBidStepInput" min="1" step="1" required>
+          </label>
+        </div>
+
+        <div class="formRow">
+          <label class="field">
+            <span>Дата начала</span>
+            <input type="datetime-local" id="startsAtInput" required>
+          </label>
+
+          <label class="field">
+            <span>Дата окончания</span>
+            <input type="datetime-local" id="endsAtInput" required>
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <button class="primary-button" type="submit">
+            Создать лот
+          </button>
+
+          <a class="secondary-button" href="index.html">
+            Отмена
+          </a>
+        </div>
+
+        <p class="form-message" id="createLotMessage"></p>
+      </form>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

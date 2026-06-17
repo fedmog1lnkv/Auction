@@ -1,0 +1,9 @@
+node_modules
+.npm-cache
+dist
+.git
+.vscode
+.env
+.env.*
+.DS_Store
+*.log

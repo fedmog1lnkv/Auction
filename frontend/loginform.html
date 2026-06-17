@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Авторизация</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main class="Form">
+    <a class="login-home-link" href="index.html">← К аукционам</a>
+
+    <div class="Form1">
+        <h1>Добро пожаловать в личный кабинет</h1>
+        <p>Войдите в аккаунт или зарегистрируйтесь.</p>
+    </div>
+
+    <div class="Form2">
+        <button class="tabBtn active" type="button" data-tab="loginForm">Войти</button>
+        <button class="tabBtn" type="button" data-tab="regForm">Регистрация</button>
+    </div>
+
+    <form class="dataentryform" id="loginForm">
+        <div class="fieldSimple">
+            <label for="loginEmail">Электронная почта</label>
+            <input id="loginEmail" type="email" name="email" placeholder="Электронная почта" required>
+        </div>
+
+        <div class="fieldSimple">
+            <label for="loginPassword">Пароль</label>
+            <input id="loginPassword" type="password" name="password" placeholder="Введите пароль" required>
+        </div>
+
+        <button class="btn" type="submit">Войти</button>
+    </form>
+
+    <form class="form" id="regForm">
+        <div class="fieldSimple">
+            <label for="regFirstName">Имя</label>
+            <input id="regFirstName" type="text" name="firstName" placeholder="Имя" required>
+        </div>
+
+        <div class="fieldSimple">
+            <label for="regLastName">Фамилия</label>
+            <input id="regLastName" type="text" name="lastName" placeholder="Фамилия" required>
+        </div>
+
+        <div class="fieldSimple">
+            <label for="regEmail">Электронная почта</label>
+            <input id="regEmail" type="email" name="email" placeholder="Электронная почта" required>
+        </div>
+
+        <div class="fieldSimple">
+            <label for="regPassword">Пароль</label>
+            <input id="regPassword" type="password" name="password" placeholder="Пароль" required>
+        </div>
+
+        <button class="btn" type="submit">Создать аккаунт</button>
+    </form>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

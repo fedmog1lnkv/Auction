@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Уведомления</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="notifications">
+
+<header class="header">
+    <a class="logo brand" href="index.html">
+        <span class="logo-icon logoMark">⚖</span>
+        <span class="logo-text">Аукцион</span>
+    </a>
+
+    <nav class="nav">
+        <a class="nav-link" href="index.html">Аукционы</a>
+        <a class="nav-link" href="bids.html">Мои ставки</a>
+        <a class="nav-link" href="how-it-works.html">Как это работает</a>
+        <a class="nav-link active" href="notifications.html">Уведомления</a>
+        <a class="nav-link" href="settings.html">Настройки</a>
+    </nav>
+
+    <form class="search" id="searchForm">
+        <input type="search" id="searchInput" placeholder="Поиск">
+    </form>
+
+    <a class="profile-link userRound" href="profile.html" aria-label="Профиль">
+        <span class="profile-icon"></span>
+    </a>
+</header>
+
+<main class="main page">
+    <section class="page-title">
+        <h1>Уведомления</h1>
+        <p>Список последних уведомлений</p>
+    </section>
+
+    <div class="profileGrid profileGridSingle">
+        <section class="contentCol">
+            <div class="card panelPad emptyState">
+                <h2>Новых уведомлений нет</h2>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
