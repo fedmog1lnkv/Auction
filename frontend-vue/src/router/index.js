@@ -6,6 +6,8 @@ import LoginPage from '../pages/LoginPage.vue'
 import BidsPage from '../pages/BidsPage.vue'
 import CreateLotPage from '../pages/CreateLotPage.vue'
 import HowItWorksPage from '../pages/HowItWorksPage.vue'
+import ProfilePage from '../pages/ProfilePage.vue'
+import MyLotsPage from '../pages/MyLotsPage.vue'
 
 const routes = [
   {
@@ -37,7 +39,17 @@ const routes = [
   path: '/how-it-works',
   name: 'how-it-works',
   component: HowItWorksPage
-  }
+  },
+  {
+  path: '/profile',
+  name: 'profile',
+  component: ProfilePage
+},
+{
+  path: '/my-lots',
+  name: 'my-lots',
+  component: MyLotsPage
+}
 ]   
 
 const router = createRouter({

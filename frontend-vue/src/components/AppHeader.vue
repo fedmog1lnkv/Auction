@@ -1,8 +1,26 @@
 <script setup>
-import { computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const router = useRouter()
+const route = useRoute()
+const searchQuery = ref(String(route.query.search || ''))
+
+watch(
+  () => route.query.search,
+  value => {
+    searchQuery.value = String(value || '')
+  }
+)
+
+function searchLots() {
+  router.replace({
+    path: '/',
+    query: searchQuery.value.trim()
+      ? { search: searchQuery.value.trim() }
+      : {}
+  })
+}
 
 const isAuth = computed(() => Boolean(localStorage.getItem('token')))
 
@@ -29,17 +47,6 @@ const userInitials = computed(() => {
     .slice(0, 2)
     .toUpperCase()
 })
-
-function logout() {
-  localStorage.removeItem('token')
-  localStorage.removeItem('refreshToken')
-  localStorage.removeItem('userId')
-  localStorage.removeItem('email')
-  localStorage.removeItem('firstName')
-  localStorage.removeItem('lastName')
-
-  router.push('/login')
-}
 </script>
 
 <template>
@@ -56,7 +63,13 @@ function logout() {
         <RouterLink to="/how-it-works">Как это работает</RouterLink>
       </nav>
 
-      <input class="header-search" type="text" placeholder="Поиск лотов">
+      <input
+        v-model="searchQuery"
+        class="header-search"
+        type="text"
+        placeholder="Поиск лотов"
+        @input="searchLots"
+      >
 
       <div class="header-profile">
         <RouterLink v-if="isAuth" class="profile-link" to="/profile">

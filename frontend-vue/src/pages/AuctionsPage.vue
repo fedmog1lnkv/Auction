@@ -1,7 +1,12 @@
 <script setup>
+
 import { computed, onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const API_URL = 'http://186.246.31.83:8080'
+
+const route = useRoute()
+const router = useRouter()
 
 const lots = ref([])
 const isLoading = ref(false)
@@ -10,16 +15,26 @@ const errorMessage = ref('')
 const selectedStatus = ref('')
 const minPrice = ref('')
 const maxPrice = ref('')
+const searchQuery = computed(() => String(route.query.search || ''))
 
 onMounted(() => {
   loadLots()
 })
 
 const filteredLots = computed(() => {
+  const query = searchQuery.value.trim().toLowerCase()
+
   return lots.value.filter(lot => {
     const price = Number(lot.currentPrice || lot.startingPrice || 0)
     const min = Number(minPrice.value)
     const max = Number(maxPrice.value)
+
+    const title = String(lot.title || '').toLowerCase()
+    const description = String(lot.description || '').toLowerCase()
+
+    if (query && !title.includes(query) && !description.includes(query)) {
+      return false
+    }
 
     if (minPrice.value && price < min) {
       return false
@@ -66,6 +81,12 @@ function resetFilters() {
   selectedStatus.value = ''
   minPrice.value = ''
   maxPrice.value = ''
+
+  router.replace({
+    path: '/',
+    query: {}
+  })
+
   loadLots()
 }
 
@@ -142,7 +163,10 @@ function formatDate(value) {
 
       <section class="lots-section">
         <div class="section-head">
-          <h2>Список лотов</h2>
+          <div>
+            <h2>Список лотов</h2>
+            <p class="muted">Найдено: {{ filteredLots.length }}</p>
+          </div>
 
           <RouterLink class="primary-button" to="/create-lot">
             Создать лот
