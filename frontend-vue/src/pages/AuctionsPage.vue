@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 const API_URL = 'http://186.246.31.83:8080'
 
@@ -7,16 +7,47 @@ const lots = ref([])
 const isLoading = ref(false)
 const errorMessage = ref('')
 
+const selectedStatus = ref('')
+const minPrice = ref('')
+const maxPrice = ref('')
+
 onMounted(() => {
   loadLots()
+})
+
+const filteredLots = computed(() => {
+  return lots.value.filter(lot => {
+    const price = Number(lot.currentPrice || lot.startingPrice || 0)
+    const min = Number(minPrice.value)
+    const max = Number(maxPrice.value)
+
+    if (minPrice.value && price < min) {
+      return false
+    }
+
+    if (maxPrice.value && price > max) {
+      return false
+    }
+
+    return true
+  })
 })
 
 async function loadLots() {
   isLoading.value = true
   errorMessage.value = ''
 
+  const params = new URLSearchParams({
+    page: '1',
+    limit: '20'
+  })
+
+  if (selectedStatus.value) {
+    params.append('status', selectedStatus.value)
+  }
+
   try {
-    const response = await fetch(`${API_URL}/lots?page=1&limit=20`)
+    const response = await fetch(`${API_URL}/lots?${params.toString()}`)
 
     if (!response.ok) {
       throw new Error('Не удалось загрузить лоты')
@@ -29,6 +60,13 @@ async function loadLots() {
   } finally {
     isLoading.value = false
   }
+}
+
+function resetFilters() {
+  selectedStatus.value = ''
+  minPrice.value = ''
+  maxPrice.value = ''
+  loadLots()
 }
 
 function formatPrice(value) {
@@ -63,12 +101,12 @@ function formatDate(value) {
     </section>
 
     <section class="layout">
-      <aside class="filters">
+      <aside class="filters card">
         <h2>Фильтры</h2>
 
         <label class="field">
           <span>Статус</span>
-          <select>
+          <select v-model="selectedStatus" @change="loadLots">
             <option value="">Все статусы</option>
             <option value="DRAFT">Черновик</option>
             <option value="ACTIVE">Активный</option>
@@ -77,17 +115,27 @@ function formatDate(value) {
           </select>
         </label>
 
-        <label class="field">
-          <span>Цена от</span>
-          <input type="number" placeholder="0">
-        </label>
+        <div class="filter-group">
+          <span class="filter-title">Цена, ₽</span>
 
-        <label class="field">
-          <span>Цена до</span>
-          <input type="number" placeholder="100000">
-        </label>
+          <div class="price-row">
+            <input
+              v-model="minPrice"
+              type="number"
+              min="0"
+              placeholder="От"
+            >
 
-        <button class="secondary-button" type="button">
+            <input
+              v-model="maxPrice"
+              type="number"
+              min="0"
+              placeholder="До"
+            >
+          </div>
+        </div>
+
+        <button class="secondary-button" type="button" @click="resetFilters">
           Сбросить
         </button>
       </aside>
@@ -110,20 +158,18 @@ function formatDate(value) {
             {{ errorMessage }}
           </p>
 
-          <p v-else-if="lots.length === 0" class="empty-message">
-            Лотов пока нет
+          <p v-else-if="filteredLots.length === 0" class="empty-message">
+            Лоты не найдены
           </p>
 
           <article
-            v-for="lot in lots"
+            v-for="lot in filteredLots"
             v-else
             :key="lot.id"
-            class="lot-card"
+            class="lot-card lot-card-full"
           >
             <div class="lot-card-content">
               <h3>{{ lot.title }}</h3>
-
-              <p class="muted">ID: {{ lot.id }}</p>
 
               <p class="lot-card-description">
                 {{ lot.description || 'Описание не добавлено' }}

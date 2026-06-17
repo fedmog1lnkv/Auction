@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const API_URL = 'http://186.246.31.83:8080'
@@ -11,10 +11,21 @@ const isLoading = ref(false)
 const errorMessage = ref('')
 const activePhoto = ref(1)
 
+const now = ref(new Date())
+let timerId = null
+
 const lotId = computed(() => route.params.id)
 
 onMounted(() => {
   loadLot()
+
+  timerId = setInterval(() => {
+    now.value = new Date()
+  }, 1000)
+})
+
+onUnmounted(() => {
+  clearInterval(timerId)
 })
 
 async function loadLot() {
@@ -70,8 +81,7 @@ function getTimeLeft(value) {
   }
 
   const endDate = new Date(value)
-  const now = new Date()
-  const diff = endDate - now
+  const diff = endDate - now.value
 
   if (diff <= 0) {
     return 'Завершён'
@@ -91,13 +101,13 @@ function padTime(value) {
 
 <template>
   <main class="page">
-    <nav class="breadcrumbs">
+    <div class="breadcrumbs">
       <RouterLink to="/">Главная</RouterLink>
       <span>/</span>
       <RouterLink to="/">Аукционы</RouterLink>
       <span>/</span>
-      <span>{{ lot?.title || 'Карточка товара' }}</span>
-    </nav>
+      <span>{{ lot ? lot.title : 'Карточка лота' }}</span>
+    </div>
 
     <p v-if="isLoading" class="empty-message">
       Загрузка лота...
