@@ -10,10 +10,41 @@ const isLoading = ref(false)
 const errorMessage = ref('')
 const activePhoto = ref(1)
 
+const actionMessage = ref('')
+const actionError = ref('')
+const isActionLoading = ref(false)
+
+const userId = localStorage.getItem('userId') || ''
+const bidAmount = ref('')
+
 const now = ref(new Date())
 let timerId = null
 
 const lotId = computed(() => route.params.id)
+
+
+const isOwner = computed(() => {
+  return String(lot.value?.sellerId || '').toLowerCase() === userId.toLowerCase()
+})
+
+const canStartLot = computed(() => {
+  return isOwner.value && lot.value?.status === 'DRAFT'
+})
+
+const minimumBidAmount = computed(() =>{
+  return Number(lot.value?.currentPrice || 0) +
+    Number(lot.value?.minBidStep || 0)
+})
+
+const canPlaceBid = computed(() =>{
+  if (!lot.value || isOwner.value){
+    return false
+  }
+
+  return lot.value.status === "ACTIVE" && 
+    new Date(lot.value.endsAt) > now.value
+
+})
 
 onMounted(() => {
   loadLot()
@@ -53,6 +84,92 @@ async function loadLot() {
 
 function formatPrice(value) {
   return `${Number(value || 0).toLocaleString('ru-RU')} ₽`
+}
+async function startLot() {
+  const token = localStorage.getItem('token')
+
+  if (!token) {
+    actionError.value = 'Сначала войдите в аккаунт'
+    return
+  }
+
+  actionMessage.value = ''
+  actionError.value = ''
+  isActionLoading.value = true
+
+  try {
+    const response = await fetch(apiUrl(`/lots/${lotId.value}/start`), {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    if (response.status === 401) {
+      throw new Error('Сессия истекла. Войдите заново.')
+    }
+
+    if (!response.ok) {
+      throw new Error('Не удалось запустить лот')
+    }
+
+    actionMessage.value = 'Лот успешно запущен'
+    await loadLot()
+  } catch (error) {
+    actionError.value = error.message
+  } finally {
+    isActionLoading.value = false
+  }
+}
+
+async function placeBid(){
+  const token = localStorage.getItem('token')
+  const amount = Number(bidAmount.value)
+
+  actionMessage.value = ''
+  actionError.value = ''
+
+  if(!token){
+    actionError.value = 'Сначала войдите в аккаунт'
+  }
+
+  if(!Number.isFinite(amount) || amount <= 0){
+    actionError.value = `Минимальная ставка: ${formatPrice(minimumBidAmount.value)}`
+    return
+  }
+
+  isActionLoading.value = true
+
+  try{
+    const response = await fetch(
+      apiUrl(`/lots/${lotId.value}/bids`),
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          amount
+        })
+      }
+    )
+  
+    const data  = await response.json().catch(() => null)
+    
+    if (!response.ok){
+      throw new Error(data?.message || 'Не удалось сделать ставку')
+    }
+
+    actionMessage.value = 'Cnfdrf ecgtiyj ghbyzndf'
+    bidAmount.value = ''
+
+    await loadLot()
+  } catch(error){
+    actionError.value = error.message
+  } finally{
+    isActionLoading.value = false
+  }
 }
 
 function formatStatus(status) {
@@ -130,13 +247,67 @@ function padTime(value) {
           <p class="lot-label">До окончания</p>
           <p class="lot-time">{{ getTimeLeft(lot.endsAt) }}</p>
 
-          <button class="primary-button wide-button" type="button">
-            Сделать ставку
-          </button>
+          <button
+              v-if="canStartLot"
+              class="primary-button wide-button"
+              type="button"
+              :disabled="isActionLoading"
+              @click="startLot"
+              >
+              {{ isActionLoading ? 'Запускаем...' : 'Запустить лот' }}
+            </button>
 
-          <button class="secondary-button wide-button" type="button">
-            В избранное
-          </button>
+            <form
+              v-else-if="canPlaceBid"
+              class="bid-form"
+              @submit.prevent="placeBid"
+            >
+              <label class="field">
+                <span>Сумма ставки, ₽</span>
+
+                <input
+                  v-model="bidAmount"
+                  type="number"
+                  step="0.01"
+                  :min="minimumBidAmount"
+                  :placeholder="String(minimumBidAmount)"
+                  required
+                >
+              </label>
+
+              <p class="bid-minimum">
+                Минимальная ставка:
+                <strong>{{ formatPrice(minimumBidAmount) }}</strong>
+              </p>
+
+              <button
+                class="primary-button wide-button"
+                type="submit"
+                :disabled="isActionLoading"
+              >
+                {{ isActionLoading ? 'Отправляем...' : 'Сделать ставку' }}
+              </button>
+            </form>
+
+            <p v-else-if="isOwner" class="muted">
+              Вы продавец этого лота и не можете делать ставки.
+            </p>
+
+            <p v-else-if="lot.status !== 'ACTIVE'" class="muted">
+              Ставки доступны только для активных лотов.
+            </p>
+
+            <p v-else class="muted">
+              Приём ставок завершён.
+            </p>
+
+            <p v-if="actionMessage" class="success-message">
+                {{ actionMessage }}
+            </p>
+
+            <p v-if="actionError" class="auth-error">
+                {{ actionError }}
+            </p>
         </section>
 
         <section class="product-gallery">
