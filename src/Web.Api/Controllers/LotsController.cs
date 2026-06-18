@@ -1,3 +1,5 @@
+using Application.Bids.GetLotBids;
+using Application.Bids.GetMyBids;
 using Application.Bids.PlaceBid;
 using Application.LotPhotos.CompleteLotPhotoUpload;
 using Application.LotPhotos.DeleteLotPhoto;
@@ -90,6 +92,31 @@ public sealed class LotsController(ISender sender) : BaseController
     {
         var command = new PlaceBidCommand(id, request.Amount);
         var result = await sender.Send(command, cancellationToken);
+        return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
+    }
+
+    [AllowAnonymous]
+    [HttpGet("{id:guid}/bids")]
+    public async Task<IActionResult> GetBids(
+        [FromRoute] Guid id,
+        [FromQuery] int page = 1,
+        [FromQuery] int limit = 20,
+        CancellationToken cancellationToken = default)
+    {
+        var query = new GetLotBidsQuery(id, page, limit);
+        var result = await sender.Send(query, cancellationToken);
+        return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
+    }
+
+    [Authorize]
+    [HttpGet("bids/me")]
+    public async Task<IActionResult> GetMyBids(
+        [FromQuery] int page = 1,
+        [FromQuery] int limit = 20,
+        CancellationToken cancellationToken = default)
+    {
+        var query = new GetMyBidsQuery(page, limit);
+        var result = await sender.Send(query, cancellationToken);
         return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
     }
 

@@ -14,6 +14,42 @@ internal sealed class BidRepository(
     ApplicationDbContext dbContext,
     ILogger<BidRepository> logger) : IBidRepository
 {
+    public async Task<IReadOnlyList<Bid>> GetByLotIdAsync(
+        Guid lotId,
+        int skip,
+        int take,
+        CancellationToken cancellationToken = default) =>
+        await dbContext.Bids
+            .AsNoTracking()
+            .Where(x => x.LotId == lotId)
+            .OrderByDescending(x => x.CreatedAt)
+            .Skip(Math.Max(0, skip))
+            .Take(Math.Max(1, take))
+            .ToListAsync(cancellationToken);
+
+    public Task<int> CountByLotIdAsync(Guid lotId, CancellationToken cancellationToken = default) =>
+        dbContext.Bids
+            .AsNoTracking()
+            .CountAsync(x => x.LotId == lotId, cancellationToken);
+
+    public async Task<IReadOnlyList<Bid>> GetByBidderIdAsync(
+        Guid bidderId,
+        int skip,
+        int take,
+        CancellationToken cancellationToken = default) =>
+        await dbContext.Bids
+            .AsNoTracking()
+            .Where(x => x.BidderId == bidderId)
+            .OrderByDescending(x => x.CreatedAt)
+            .Skip(Math.Max(0, skip))
+            .Take(Math.Max(1, take))
+            .ToListAsync(cancellationToken);
+
+    public Task<int> CountByBidderIdAsync(Guid bidderId, CancellationToken cancellationToken = default) =>
+        dbContext.Bids
+            .AsNoTracking()
+            .CountAsync(x => x.BidderId == bidderId, cancellationToken);
+
     public async Task<Result<BidPlacement>> PlaceAsync(
         Guid lotId,
         Guid bidderId,
