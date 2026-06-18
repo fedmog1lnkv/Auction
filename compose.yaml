@@ -1,4 +1,13 @@
 ﻿services:
+  aspire-dashboard:
+    image: mcr.microsoft.com/dotnet/aspire-dashboard:latest
+    container_name: aspire-dashboard
+    environment:
+      DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS: "true"
+    ports:
+      - "18888:18888"
+      - "4317:18889"
+
   postgres:
     image: postgres:17-alpine
     container_name: auction-postgres
@@ -22,10 +31,15 @@
       context: .
       dockerfile: src/Web.Api/Dockerfile
     depends_on:
+      aspire-dashboard:
+        condition: service_started
       postgres:
         condition: service_healthy
     environment:
       ConnectionStrings__Database: Host=postgres;Port=5432;Database=auction;Username=postgres;Password=postgres
+      OTEL_SERVICE_NAME: auction-backend
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire-dashboard:18889
+      OTEL_EXPORTER_OTLP_PROTOCOL: grpc
     ports:
       - "8080:8080"
 
