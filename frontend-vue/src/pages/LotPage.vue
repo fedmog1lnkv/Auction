@@ -17,6 +17,10 @@ const isActionLoading = ref(false)
 const userId = localStorage.getItem('userId') || ''
 const bidAmount = ref('')
 
+const bidHistory = ref([])
+const isBidHistoryLoading = ref(false)
+const bidHistoryError = ref('')
+
 const now = ref(new Date())
 let timerId = null
 
@@ -48,6 +52,7 @@ const canPlaceBid = computed(() =>{
 
 onMounted(() => {
   loadLot()
+  loadBidHistory()
 
   timerId = setInterval(() => {
     now.value = new Date()
@@ -81,6 +86,29 @@ async function loadLot() {
     isLoading.value = false
   }
 }
+
+async function loadBidHistory() {
+  isBidHistoryLoading.value = true
+  bidHistoryError.value =''
+
+  try {
+    const response = await fetch(
+      apiUrl(`/lots/${lotId.value}/bids?page=1&limit=50`)
+    )
+
+    if (!response.ok){
+      throw new Error('Не удалось загрузить историю ставок')
+    }
+
+    const data = await response.json()
+    bidHistory.value = data.items || []
+  } catch (error){
+    bidHistoryError.value = error.message
+  } finally {
+    isBidHistoryLoading.value = false
+  }
+}
+
 
 function formatPrice(value) {
   return `${Number(value || 0).toLocaleString('ru-RU')} ₽`
@@ -131,6 +159,7 @@ async function placeBid(){
 
   if(!token){
     actionError.value = 'Сначала войдите в аккаунт'
+    return
   }
 
   if(!Number.isFinite(amount) || amount <= 0){
@@ -164,7 +193,10 @@ async function placeBid(){
     actionMessage.value = 'Cnfdrf ecgtiyj ghbyzndf'
     bidAmount.value = ''
 
-    await loadLot()
+    await Promise.all([
+      loadLot(),
+      loadBidHistory()
+    ])
   } catch(error){
     actionError.value = error.message
   } finally{
@@ -189,6 +221,14 @@ function formatDate(value) {
   }
 
   return new Date(value).toLocaleString('ru-RU')
+}
+
+function formatBidDate(value){
+  if(!value){
+    return 'Дата не указзана'
+  }
+  return new Date(value).toLocaleString('ru-RU')
+
 }
 
 function getTimeLeft(value) {
@@ -334,10 +374,27 @@ function padTime(value) {
         <aside class="bid-history">
           <h2>История ставок</h2>
 
-          <div class="bid-list">
-            <p class="empty-message">
-              История ставок пока недоступна
-            </p>
+          <p v-if="isBidHistoryLoading" class="muted">
+            Загрузка истории...
+        </p>
+
+        <p v-else-if="bidHistoryError" class="auth-error">
+          {{ bidHistoryError }}
+        </p>
+
+        <p v-else-if="bidHistory.length === 0" class="muted">
+          Ставок пока нет
+        </p>
+
+        <div v-else class="bid-list">
+          <div
+            v-for="bid in bidHistory"
+            :key="bid.id"
+            class="bid-history-item"
+          >
+            <strong>{{ formatPrice(bid.amount) }}</strong>
+            <span>{{ formatBidDate(bid.createdAt) }}</span>
+          </div>
           </div>
         </aside>
       </section>

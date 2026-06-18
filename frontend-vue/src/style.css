@@ -928,3 +928,29 @@ a {
   min-height: 38px;
   padding: 0 16px;
 }
+
+.bid-list {
+  display: grid;
+  border: 1px solid #e1e6ef;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.bid-history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px;
+  border-bottom: 1px solid #e1e6ef;
+}
+
+.bid-history-item:last-child {
+  border-bottom: 0;
+}
+
+.bid-history-item span {
+  color: #687386;
+  font-size: 14px;
+  text-align: right;
+}
