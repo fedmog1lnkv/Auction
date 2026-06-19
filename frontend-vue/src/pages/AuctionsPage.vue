@@ -11,9 +11,19 @@ const lots = ref([])
 const isLoading = ref(false)
 const errorMessage = ref('')
 
+const isLoadingMore = ref('')
+const currentPage = ref(1)
+const totalLots = ref (0)
+
+const PAGE_SIZE = 20
+
 const minPrice = ref('')
 const maxPrice = ref('')
 const searchQuery = computed(() => String(route.query.search || ''))
+
+const hasMore = computed(() => {
+  return lots.value.length < totalLots.value
+})
 
 onMounted(() => {
   loadLots()
@@ -46,14 +56,19 @@ const filteredLots = computed(() => {
   })
 })
 
-async function loadLots() {
-  isLoading.value = true
+async function loadLots(page = 1, append = false) {
+
+  if(append){
+    isLoadingMore.value = true
+  } else{
+    isLoading.value = true
+  }
   errorMessage.value = ''
 
   const params = new URLSearchParams({
     status: 'ACTIVE',
-    page: '1',
-    limit: '20'
+    page: String(page),
+    limit: String(PAGE_SIZE)
   })
   try {
     const response = await fetch(apiUrl(`/lots?${params.toString()}`))
@@ -63,16 +78,33 @@ async function loadLots() {
     }
 
     const data = await response.json()
-    lots.value = data.items || []
-  } catch (error) {
+    const newLots = data.items || []
+
+    const combinedLots = append
+      ? [...lots.value, ...newLots]
+      : newLots
+
+    lots.value = Array.from(
+      new Map(combinedLots.map(lot => [lot.id, lot])).values()
+    )
+    currentPage.value = page
+    totalLots.value = Number(data.total || 0)
+    } catch (error) {
     errorMessage.value = 'Не удалось загрузить лоты'
   } finally {
     isLoading.value = false
+    isLoadingMore.value = false
   }
 }
 
+async function loadMore() {
+  if (isLoadingMore.value || !hasMore.value){
+    return
+  }
+  await loadLots (currentPage.value + 1, true)
+}
+
 function resetFilters() {
-  selectedStatus.value = ''
   minPrice.value = ''
   maxPrice.value = ''
 
@@ -81,7 +113,7 @@ function resetFilters() {
     query: {}
   })
 
-  loadLots()
+  loadLots(1, false)
 }
 
 function formatPrice(value) {
@@ -148,7 +180,9 @@ function formatDate(value) {
         <div class="section-head">
           <div>
             <h2>Список лотов</h2>
-            <p class="muted">Найдено: {{ filteredLots.length }}</p>
+            <p class="muted">
+              Показано: {{ filteredLots.length }} из {{ totalLots }}
+            </p>
           </div>
 
           <RouterLink class="primary-button" to="/create-lot">
@@ -205,6 +239,11 @@ function formatDate(value) {
               </RouterLink>
             </div>
           </article>
+        </div>
+        <div v-if="hasMore" class="load-more-row">
+          <button class="secondary-button" type="button" :disabled="isLoadingMore" @click="loadMore">
+              {{ isLoadingMore ? 'Загрузка...' : 'Показать ещё' }}
+          </button>
         </div>
       </section>
     </section>

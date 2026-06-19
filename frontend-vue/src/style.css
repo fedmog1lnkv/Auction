@@ -954,3 +954,12 @@ a {
   font-size: 14px;
   text-align: right;
 }
+.load-more-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.load-more-row .secondary-button {
+  min-width: 180px;
+}
