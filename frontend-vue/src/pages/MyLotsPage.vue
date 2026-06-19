@@ -8,6 +8,9 @@ const router = useRouter()
 const lots = ref([])
 const isLoading = ref(false)
 const errorMessage = ref('')
+const actionMessage = ref('')
+const actionError = ref('')
+const actionLotId = ref('')
 
 const userId = localStorage.getItem('userId') || ''
 
@@ -25,7 +28,9 @@ async function loadMyLots() {
   errorMessage.value = ''
 
   try {
-    const response = await fetch(apiUrl(`/lots?seller_id=${userId}&page=1&limit=20`))
+    const response = await fetch(
+      apiUrl(`/lots?seller_id=${userId}&page=1&limit=20`)
+    )
 
     if (!response.ok) {
       throw new Error('Не удалось загрузить ваши лоты')
@@ -37,6 +42,70 @@ async function loadMyLots() {
     errorMessage.value = error.message
   } finally {
     isLoading.value = false
+  }
+}
+
+async function performLotAction(lot, action) {
+  const token = localStorage.getItem('token')
+
+  if (!token) {
+    router.push('/login')
+    return
+  }
+
+  const confirmations = {
+    finish: 'Завершить этот аукцион?',
+    cancel: 'Отменить этот лот?',
+    delete: 'Удалить этот лот без возможности восстановления?'
+  }
+
+  if (confirmations[action] && !window.confirm(confirmations[action])) {
+    return
+  }
+
+  actionMessage.value = ''
+  actionError.value = ''
+  actionLotId.value = lot.id
+
+  const endpoint = action === 'delete'
+    ? `/lots/${lot.id}`
+    : `/lots/${lot.id}/${action}`
+
+  const method = action === 'delete' ? 'DELETE' : 'POST'
+
+  try {
+    const response = await fetch(apiUrl(endpoint), {
+      method,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    const data = await response.json().catch(() => null)
+
+    if (response.status === 401) {
+      localStorage.removeItem('token')
+      router.push('/login')
+      return
+    }
+
+    if (!response.ok) {
+      throw new Error(data?.message || 'Не удалось изменить лот')
+    }
+
+    const messages = {
+      start: 'Лот запущен',
+      finish: 'Аукцион завершён',
+      cancel: 'Лот отменён',
+      delete: 'Лот удалён'
+    }
+
+    actionMessage.value = messages[action]
+    await loadMyLots()
+  } catch (error) {
+    actionError.value = error.message
+  } finally {
+    actionLotId.value = ''
   }
 }
 
@@ -76,6 +145,14 @@ function formatDate(value) {
         Создать лот
       </RouterLink>
     </div>
+
+    <p v-if="actionMessage" class="success-message">
+      {{ actionMessage }}
+    </p>
+
+    <p v-if="actionError" class="auth-error">
+      {{ actionError }}
+    </p>
 
     <p v-if="isLoading" class="empty-message">
       Загрузка лотов...
@@ -117,12 +194,54 @@ function formatDate(value) {
             <strong>{{ formatDate(lot.endsAt) }}</strong>
           </div>
 
-          <RouterLink
-            class="primary-button lot-card-link"
-            :to="`/lots/${lot.id}`"
-          >
-            Открыть лот
-          </RouterLink>
+          <div class="my-lot-actions">
+            <RouterLink
+              class="secondary-button"
+              :to="`/lots/${lot.id}`"
+            >
+              Открыть
+            </RouterLink>
+
+            <button
+              v-if="lot.status === 'DRAFT'"
+              class="primary-button"
+              type="button"
+              :disabled="actionLotId === lot.id"
+              @click="performLotAction(lot, 'start')"
+            >
+              Запустить
+            </button>
+
+            <button
+              v-if="lot.status === 'ACTIVE'"
+              class="primary-button"
+              type="button"
+              :disabled="actionLotId === lot.id"
+              @click="performLotAction(lot, 'finish')"
+            >
+              Завершить
+            </button>
+
+            <button
+              v-if="lot.status === 'DRAFT' || lot.status === 'ACTIVE'"
+              class="danger-button"
+              type="button"
+              :disabled="actionLotId === lot.id"
+              @click="performLotAction(lot, 'cancel')"
+            >
+              Отменить
+            </button>
+
+            <button
+              v-if="lot.status === 'DRAFT'"
+              class="danger-button"
+              type="button"
+              :disabled="actionLotId === lot.id"
+              @click="performLotAction(lot, 'delete')"
+            >
+              Удалить
+            </button>
+          </div>
         </div>
       </article>
     </section>
