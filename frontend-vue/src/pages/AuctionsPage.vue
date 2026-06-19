@@ -11,7 +11,6 @@ const lots = ref([])
 const isLoading = ref(false)
 const errorMessage = ref('')
 
-const selectedStatus = ref('')
 const minPrice = ref('')
 const maxPrice = ref('')
 const searchQuery = computed(() => String(route.query.search || ''))
@@ -52,14 +51,10 @@ async function loadLots() {
   errorMessage.value = ''
 
   const params = new URLSearchParams({
+    status: 'ACTIVE',
     page: '1',
     limit: '20'
   })
-
-  if (selectedStatus.value) {
-    params.append('status', selectedStatus.value)
-  }
-
   try {
     const response = await fetch(apiUrl(`/lots?${params.toString()}`))
 
@@ -123,17 +118,6 @@ function formatDate(value) {
     <section class="layout">
       <aside class="filters card">
         <h2>Фильтры</h2>
-
-        <label class="field">
-          <span>Статус</span>
-          <select v-model="selectedStatus" @change="loadLots">
-            <option value="">Все статусы</option>
-            <option value="DRAFT">Черновик</option>
-            <option value="ACTIVE">Активный</option>
-            <option value="FINISHED">Завершён</option>
-            <option value="CANCELLED">Отменён</option>
-          </select>
-        </label>
 
         <div class="filter-group">
           <span class="filter-title">Цена, ₽</span>
